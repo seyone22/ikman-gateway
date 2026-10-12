@@ -13,13 +13,13 @@
 
 **A clean, production-grade RESTful API Gateway and Model Context Protocol (MCP) Server for Sri Lanka's largest marketplace (ikman.lk).**
 
-[Live API Docs](https://ikman-gateway-production.up.railway.app/api/docs) • [MCP SSE Endpoint](https://ikman-gateway-production.up.railway.app/mcp/sse) • [Architecture](#-architecture) • [Getting Started](#-getting-started) • [MCP Setup](#-using-as-an-mcp-server)
+[Live API Docs](https://ikman-gateway-production.up.railway.app/api/docs) • [MCP SSE Endpoint](https://ikman-gateway-production.up.railway.app/mcp/sse) • [Architecture](#architecture) • [Getting Started](#local-development) • [MCP Setup](#using-as-an-mcp-server)
 
 </div>
 
 ---
 
-## 💡 Why This Exists
+## Why This Exists
 
 > *"I just wanted to buy a tablet online, but the user experience on ikman.lk was so frustratingly bad that I had to reverse-engineer their platform and build a proper API gateway for it."*
 
@@ -36,7 +36,7 @@
 
 ---
 
-## 🌐 Live Production Deployment (Railway)
+## Live Production Deployment (Railway)
 
 The service is deployed live on **Railway** in the **Southeast Asia (Singapore)** region:
 
@@ -47,46 +47,45 @@ The service is deployed live on **Railway** in the **Southeast Asia (Singapore)*
 
 ---
 
-## 🛠️ Architecture
+## Architecture
 
 ```mermaid
 flowchart TD
     subgraph Clients["Clients"]
-        WebClient["Web / Mobile Apps / Developers"]
-        AIDesktop["Claude Desktop / Cursor / VS Code (Stdio)"]
+        WebClient["Web & Mobile Applications"]
+        AIDesktop["Claude Desktop / Cursor (Stdio)"]
         AIRemote["Antigravity / Remote Agents (SSE)"]
     end
 
     subgraph Gateway["Ikman Gateway (NestJS)"]
-        Swagger["OpenAPI / Swagger (/api/docs)"]
-        RESTCtrl["Ads & Taxonomy Controllers (/api/v1)"]
-        MCPStdio["MCP Stdio Runner (bin/mcp-stdio.ts)"]
-        MCPSse["MCP SSE Controller (/mcp/sse)"]
-        
-        subgraph Services["Core Engine"]
-            Validation["DTO Validation Pipes (class-validator)"]
-            Cache["In-Memory Cache (TTL Caching)"]
-            Normalizer["IkmanNormalizerService (Price parse, spam filter)"]
-            Client["IkmanClientService (Browser Spoofing, Taxonomy Cache)"]
-        end
+        RESTCtrl["REST Controllers (/api/v1)"]
+        MCPSse["MCP SSE Server (/mcp/sse)"]
+        MCPStdio["MCP Stdio Runner"]
+        Swagger["Swagger UI (/api/docs)"]
+        Validation["DTO Validation Pipes"]
+        Cache["In-Memory Cache (TTL)"]
+        Client["IkmanClientService"]
+        Normalizer["IkmanNormalizerService"]
     end
 
     subgraph Upstream["ikman.lk Backend"]
-        SerpAPI["GET /data/serp"]
-        DetailAPI["GET /data/details"]
-        TaxonomyAPI["GET /data/categories & /data/locations"]
+        SerpAPI["Search SERP API"]
+        DetailAPI["Listing Details API"]
+        TaxonomyAPI["Categories & Locations API"]
     end
 
     WebClient --> RESTCtrl
     AIRemote --> MCPSse
     AIDesktop --> MCPStdio
-    
-    RESTCtrl --> Validation --> Cache --> Client
-    MCPSse --> Validation --> Cache --> Client
+
+    RESTCtrl --> Validation
+    MCPSse --> Validation
+    Validation --> Cache
+    Cache --> Client
     MCPStdio --> Client
 
-    Client --> Normalizer
     Client --> Upstream
+    Client --> Normalizer
 ```
 
 ### Technical Highlights
@@ -98,7 +97,7 @@ flowchart TD
 
 ---
 
-## 🤖 Using as an MCP Server
+## Using as an MCP Server
 
 The server provides 4 specialized MCP tools:
 
@@ -150,7 +149,7 @@ In your `~/.gemini/config/mcp_config.json`:
 
 ---
 
-## 🚀 REST API Reference
+## REST API Reference
 
 ### 1. Search Listings with True Price Sorting
 
@@ -264,7 +263,7 @@ GET /api/v1/locations
 
 ---
 
-## 💻 Local Development
+## Local Development
 
 ### Prerequisites
 * Node.js >= 18.x
@@ -297,7 +296,7 @@ npm run mcp:stdio
 
 ---
 
-## 🧪 Testing
+## Testing
 
 The repository includes a comprehensive Jest test suite:
 
@@ -310,6 +309,6 @@ npm test
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
