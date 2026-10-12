@@ -14,6 +14,15 @@ A production-grade, enterprise-ready **NestJS** RESTful API Gateway and Model Co
 
 ---
 
+## 🌐 Live Production Deployment (Railway)
+
+* **Public URL:** [https://ikman-gateway-production.up.railway.app](https://ikman-gateway-production.up.railway.app)
+* **Interactive Swagger UI:** [https://ikman-gateway-production.up.railway.app/api/docs](https://ikman-gateway-production.up.railway.app/api/docs)
+* **MCP SSE Endpoint:** `https://ikman-gateway-production.up.railway.app/mcp/sse`
+* **Region:** Southeast Asia (Singapore)
+
+---
+
 ## 📦 Getting Started
 
 ### 1. Installation
