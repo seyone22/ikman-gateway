@@ -20,16 +20,20 @@ export class McpController {
   async handleSse(@Req() req: Request, @Res() res: Response): Promise<void> {
     this.logger.log('New MCP SSE client connection initiated');
     const transport = new SSEServerTransport('/mcp/messages', res);
+    const server = this.mcpService.createServer();
 
     const sessionId = transport.sessionId;
     this.transports.set(sessionId, transport);
 
-    req.on('close', () => {
+    req.on('close', async () => {
       this.logger.log(`MCP client disconnected: ${sessionId}`);
       this.transports.delete(sessionId);
+      try {
+        await server.close();
+      } catch (e) {}
     });
 
-    await this.mcpService.getServer().connect(transport);
+    await server.connect(transport);
   }
 
   @Post('messages')

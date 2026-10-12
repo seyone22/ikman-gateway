@@ -12,13 +12,14 @@ import { ConditionOption, SortByOption } from '../ads/dto/search-ads.dto';
 @Injectable()
 export class McpService {
   private readonly logger = new Logger(McpService.name);
-  private readonly server: Server;
 
   constructor(
     private readonly adsService: AdsService,
     private readonly taxonomyService: TaxonomyService,
-  ) {
-    this.server = new Server(
+  ) {}
+
+  createServer(): Server {
+    const server = new Server(
       {
         name: 'ikman-mcp-server',
         version: '1.0.0',
@@ -30,16 +31,17 @@ export class McpService {
       },
     );
 
-    this.registerHandlers();
+    this.registerHandlers(server);
+    return server;
   }
 
   getServer(): Server {
-    return this.server;
+    return this.createServer();
   }
 
-  private registerHandlers(): void {
+  private registerHandlers(server: Server): void {
     // List available tools
-    this.server.setRequestHandler(ListToolsRequestSchema, async () => {
+    server.setRequestHandler(ListToolsRequestSchema, async () => {
       const tools: Tool[] = [
         {
           name: 'ikman_search_ads',
@@ -140,7 +142,7 @@ export class McpService {
     });
 
     // Execute tools
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const { name, arguments: args } = request.params;
       this.logger.log(`MCP CallTool: ${name} with args: ${JSON.stringify(args)}`);
 
