@@ -43,7 +43,7 @@ The service is deployed live on **Railway** in the **Southeast Asia (Singapore)*
 * **Base URL:** [`https://ikman-gateway-production.up.railway.app`](https://ikman-gateway-production.up.railway.app)
 * **Interactive OpenAPI / Swagger UI:** [`https://ikman-gateway-production.up.railway.app/api/docs`](https://ikman-gateway-production.up.railway.app/api/docs)
 * **Remote MCP SSE Endpoint:** [`https://ikman-gateway-production.up.railway.app/mcp/sse`](https://ikman-gateway-production.up.railway.app/mcp/sse)
-* **Health Check:** `GET /api/v1/categories`
+* **Health Check / Railway Probe:** `GET /health` (or `GET /api/v1/health`)
 
 ---
 

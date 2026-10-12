@@ -5,6 +5,7 @@ import { IkmanModule } from './ikman/ikman.module';
 import { AdsModule } from './ads/ads.module';
 import { TaxonomyModule } from './taxonomy/taxonomy.module';
 import { McpModule } from './mcp/mcp.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { McpModule } from './mcp/mcp.module';
       ttl: 120, // default cache 2 minutes
       max: 500, // max 500 items in cache
     }),
+    HealthModule,
     IkmanModule,
     AdsModule,
     TaxonomyModule,
