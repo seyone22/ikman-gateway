@@ -50,6 +50,6 @@ export class McpController {
       return;
     }
 
-    await transport.handlePostMessage(req, res);
+    await transport.handlePostMessage(req, res, req.body);
   }
 }
